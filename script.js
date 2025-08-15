@@ -1,3 +1,5 @@
+const OPENAI_API_KEY = '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';
+
 let model = '';
 let history = [];
 let chartData = [];
@@ -36,13 +38,37 @@ function compressLocal(text,maxWords){
     return compressed.slice(0,maxWords).join(" ");
 }
 
+async function expandWithOpenAI(text){
+    try{
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method:'POST',
+            headers:{'Content-Type':'application/json','Authorization':`Bearer ${OPENAI_API_KEY}`},
+            body:JSON.stringify({
+                model:"gpt-4o-mini",
+                messages:[{role:"user", content:`Expand creatively in AI 1∞1 style: "${text}"`}],
+                max_tokens:150
+            })
+        });
+        const data = await response.json();
+        return data.choices[0].message.content.trim();
+    } catch(err){
+        console.error(err);
+        return expandLocal(text,'mix'); // fallback
+    }
+}
+
 async function runCycle(userText,maxWords){
     const expandType = document.getElementById('expandType').value;
     appendChatHTML(`<div class="message user"><b>المستخدم:</b> ${userText}</div>`);
     if(model==='') model=userText;
+
     const expandedLocal = expandLocal(model,expandType);
-    const returned = compressLocal(expandedLocal,maxWords);
+    const expandedAI = await expandWithOpenAI(model);
+    const combinedExpansion = expandedLocal + " | " + expandedAI;
+    const returned = compressLocal(combinedExpansion,maxWords);
+
     appendChatHTML(`<div class="message return"><b>Return:</b> ${returned}</div>`);
+
     model=returned;
     history.push(returned);
     chartLabels.push(history.length);

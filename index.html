@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>AI 1 ∞ 1 – النسخة الاحترافية</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h2>AI 1 ∞ 1 – النسخة الاحترافية</h2>
+
+<div id="chatBox"></div>
+
+<input type="text" id="userInput" placeholder="اكتب رسالتك هنا...">
+<input type="number" id="maxWords" value="25">
+<select id="expandType">
+  <option value="text">نص</option>
+  <option value="numbers">أرقام</option>
+  <option value="symbols">رموز</option>
+  <option value="mix">مزيج</option>
+</select>
+<button onclick="sendMessage()">دورة واحدة</button>
+<button onclick="sendMultiple()">5 دورات</button>
+
+<h3>مخطط طول النص بعد كل دورة</h3>
+<canvas id="chartCanvas" width="400" height="150"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>
